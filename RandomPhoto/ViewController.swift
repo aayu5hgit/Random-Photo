@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  RandomPhoto
 //
-//  Created by Ashish Ahuja on 03/12/22.
+//  Created by Aayush Talreja on 03/12/22.
 //
 
 import UIKit
@@ -14,23 +14,36 @@ class ViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = .white
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
         return imageView
     }()
     
     //Setting up button using UIButton (User Interface Button)
     private let button: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .brown
+        button.backgroundColor = .white
+        button.layer.opacity = 1
+        button.layer.cornerRadius = 8
+        button.clipsToBounds = true
         button.setTitle("Random Photo", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.gray, for: .normal)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBrown;
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = [#colorLiteral(red: 0.9394168258, green: 0.8027816415, blue: 0.8563931584, alpha: 1).cgColor, UIColor(red: 105/255, green: 205/255, blue: 218/255, alpha: 1).cgColor]
+        gradientLayer.shouldRasterize = true
+        view.layer.addSublayer(gradientLayer)
+//        view.backgroundColor = .systemBrown;
         view.addSubview(imageView) //Showing imageView
-        imageView.frame = CGRect(x: 0, y: 0, width: 300, height: 300) // Setting frame for imageView
+        imageView.frame = CGRect(x: 0,
+                                 y: 0,
+                                 width: 300,
+                                 height: 300) // Setting frame for imageView
         imageView.center = view.center //Align imageView to center
         
         //Showing button and setting position using CGRect
@@ -45,12 +58,15 @@ class ViewController: UIViewController {
     
     @objc func tapButton(){
         getRandomPhoto()
+        button.layer.opacity -= 0.05
+    
     }
     
     func getRandomPhoto(){
         let urlString = "https://source.unsplash.com/random/600x600" //Put the URL of images in a string
         let url = URL(string: urlString)! //Fetch the URL of the string
         //Get the data out of the fetched URL:
+
         guard let data = try? Data(contentsOf: url) else{
             return
         }
@@ -58,4 +74,3 @@ class ViewController: UIViewController {
         imageView.image = UIImage(data: data)
     }
 }
-
