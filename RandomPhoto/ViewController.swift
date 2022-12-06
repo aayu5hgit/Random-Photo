@@ -23,13 +23,14 @@ class ViewController: UIViewController {
     private let button: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.layer.opacity = 1
         button.layer.cornerRadius = 8
         button.clipsToBounds = true
-        button.setTitle("Random Photo", for: .normal)
+        button.setTitle("Shuffle", for: .normal)
         button.setTitleColor(.gray, for: .normal)
+        
         return button
     }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +59,16 @@ class ViewController: UIViewController {
     
     @objc func tapButton(){
         getRandomPhoto()
-        button.layer.opacity -= 0.05
-    
+        //Adding ScaleX Transformation Animation on button click
+        UIView.animate(withDuration: 0.2,
+            animations: {
+                self.button.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            },
+            completion: { _ in
+                UIView.animate(withDuration: 0.2) {
+                    self.button.transform = CGAffineTransform.identity
+                }
+            })
     }
     
     func getRandomPhoto(){
